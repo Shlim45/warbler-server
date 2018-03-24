@@ -5,6 +5,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const errorHandler = require('./handlers/error');
 const authRoutes = require('./routes/auth');
+const messagesRoutes = require('./routes/messages');
+const { loginRequired, ensureCorrectUser } = require('./middleware/auth');
 
 const PORT = process.env.PORT || 8081;
 
@@ -13,6 +15,11 @@ app.use(bodyParser.json());
 
 // ROUTES
 app.use('/api/auth', authRoutes);
+app.use('/api/users/:id/messages', 
+    loginRequired, 
+    ensureCorrectUser, 
+    messagesRoutes
+);
 
 
 // MIDDLEWARE
